@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>轮播图</title>
+    <link href="css/shuffing.css" rel="stylesheet">
+    <script type="text/javascript">
+        window.onload = function(){
+            var contain = document.getElementById("contain");
+            var list =  document.getElementById("list");
+            var buttons =  document.getElementById("buttons").getElementsByTagName("span");
+            var prev =  document.getElementById("prev");
+            var next =  document.getElementById("next");
+            var index = 1;
+            var len = 5;
+            var animated = false;
+            var interval = 3000;
+            var timer;
+
+            function animate(offset){
+               if(offset == 0){
+                   return;
+               }
+                animated = true;
+                var time = 300;
+                var interval =10;
+                var speed = offset/(time/interval);
+                var left = parseInt(list.style.left) + offset;
+;
+                var go = function(){
+                    if((speed > 0 && parseInt(list.style.left) < left) || (speed < 0 && parseInt(list.style.left) > left)){
+                        list.style.left =  parseInt(list.style.left) +speed+"px";
+                        setTimeout(go,interval);
+                    }
+                    else{
+                        list.style.left = left +"px";
+                        if(left>-200){
+                            list.style.left = -600*len +"px";
+                        }
+                        if(left<(-600*len)){
+                            list.style.left = "-600px";
+                        }
+                        animated = false;
+                    }
+                };
+
+                go();
+            }
+            function showButton(){
+                for(var i = 0;i < buttons.length; i++){
+                     if(buttons[i].className == "on"){
+                         buttons[i].className ="";
+                         break;
+                     }
+                }
+                buttons[index-1].className ="on";
+            }
+            function play(){
+                timer = setTimeout(function(){
+                    next.onclick();
+                    play();
+                },interval);
+            }
+            function stop(){
+                clearTimeout(timer);
+            }
+            next.onclick = function(){
+                 if(animated){
+                     return;
+                 }
+                 if(index == 5){
+                    index = 1;
+                 }
+                 else{
+                     index = index + 1;
+                 }
+                animate(-600);
+                showButton();
+            };
+            prev.onclick = function(){
+                 if(animated){
+                     return;
+                 }
+                 if(index == 1){
+                     index = 5;
+                 }
+                else{
+                     index = index -1;
+                 }
+                animate(600);
+                showButton();
+            };
+            for(var i = 0;i<buttons.length; i++){
+               buttons[i].onclick = function(){
+                   if(animated){
+                       return;
+                   }
+                   if(this.className =="on"){
+                       return;
+                   }
+                   var myIndex = parseInt(this.getAttribute("index"));
+                   var offset = -600 * (myIndex-index);
+                   animate(offset);
+                   index = myIndex;
+                   showButton();
+
+               }
+            }
+            contain.onmouseover = stop;
+            contain.onmouseout = play;
+            play();
+        }
+    </script>
+</head>
+<body>
+<div id="contain">
+    <div id="list"  style="left: -600px;">
+        <img src="css/i/1.jpg" alt="图一">
+        <img src="css/i/2.jpg" alt="图一">
+        <img src="css/i/3.jpg" alt="图一">
+        <img src="css/i/4.jpg" alt="图一">
+        <img src="css/i/5.jpg" alt="图一">
+        <img src="css/i/1.jpg" alt="图一">
+        <img src="css/i/3.jpg" alt="图一">
+    </div>
+    <div id="buttons">
+        <span  index="1" class="on"></span>
+        <span  index="2"></span>
+        <span  index="3"></span>
+        <span  index="4"></span>
+        <span  index="5"></span>
+    </div>
+    <a href="#" id="prev" class="arrow">&lt</a>
+    <a href="#" id="next" class="arrow">&gt</a>
+</div>
+</body>
+</html>
