@@ -1,7 +1,5 @@
 ﻿查看轮播信息--谢俊梅----测试
 
-Creating a new branch is quick & simple.
+Creating a new branch is quick AND simple.
 
-啊啊啊啊啊啊
 
-111111111111111111111111111111111111111111
